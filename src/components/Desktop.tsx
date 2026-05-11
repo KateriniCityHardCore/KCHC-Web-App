@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { AppBar, Toolbar, Button } from 'react95';
+import { AppBar, Toolbar, Button, TextInput } from 'react95';
 import artistsData from '../data/artists.json';
 import type { Artist } from '../types';
 import { FolderIcon } from './FolderIcon';
@@ -27,6 +27,13 @@ export function Desktop() {
   
   // Κατάσταση για τα ανοιχτά παράθυρα
   const [openWindows, setOpenWindows] = useState<string[]>([]);
+  
+  // Κατάσταση για την αναζήτηση
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const filteredArtists = artists.filter(artist => 
+    artist.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   
   // Έλεγχος αν υπάρχει καλλιτέχνης στο URL
   useEffect(() => {
@@ -55,7 +62,7 @@ export function Desktop() {
   return (
     <DesktopWrapper>
       {/* Εικονίδια για κάθε καλλιτέχνη */}
-      {artists.map(artist => (
+      {filteredArtists.map(artist => (
         <FolderIcon 
           key={artist.Name} 
           name={artist.Name} 
@@ -79,10 +86,18 @@ export function Desktop() {
       {/* Γραμμή Εργασιών (Taskbar) */}
       <AppBar style={{ top: 'auto', bottom: 0 }}>
         <Toolbar style={{ justifyContent: 'space-between' }}>
-          <Button style={{ fontWeight: 'bold' }}>
-            <img src="/images/kchc.ico" alt="Start" style={{ height: '20px', marginRight: '5px' }} />
-            Start
-          </Button>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Button style={{ fontWeight: 'bold' }}>
+              <img src="/images/kchc.ico" alt="Start" style={{ height: '20px', marginRight: '5px' }} />
+              Start
+            </Button>
+            <TextInput
+              value={searchQuery}
+              placeholder="Αναζήτηση..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              style={{ width: '200px', marginLeft: '10px' }}
+            />
+          </div>
           <div style={{ padding: '0 10px' }}>
             {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </div>
