@@ -1,6 +1,52 @@
-import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Music, Volume2 } from 'lucide-react';
-import './AudioPlayer.css';
+import React, { useState, useRef, useEffect } from 'react';
+import { Play, Pause, Volume2 } from 'lucide-react';
+import { Button, Panel } from 'react95';
+import styled from 'styled-components';
+
+// Στυλ για τον Player
+const PlayerWrapper = styled(Panel)`
+  padding: 10px;
+  margin-top: 10px;
+  background: #c0c0c0;
+`;
+
+const ControlsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+const SongName = styled.div`
+  font-weight: bold;
+  font-size: 12px;
+  background: #000;
+  color: #0f0; /* Πράσινο LED στυλ */
+  padding: 5px;
+  font-family: 'Courier New', Courier, monospace;
+  margin-bottom: 10px;
+  border: 1px inset #999;
+`;
+
+const PlaylistWrapper = styled.div`
+  background: #fff;
+  border: 1px inset #999;
+  max-height: 80px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+`;
+
+const PlaylistItem = styled.div<{ active: boolean }>`
+  padding: 3px 5px;
+  font-size: 11px;
+  cursor: pointer;
+  background: ${props => props.active ? '#000080' : 'transparent'};
+  color: ${props => props.active ? '#fff' : '#000'};
+  
+  &:hover {
+    background: ${props => props.active ? '#000080' : '#e0e0e0'};
+  }
+`;
 
 interface Props {
   songs: string[];
@@ -13,7 +59,6 @@ export function AudioPlayer({ songs }: Props) {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1); // 0 to 1
 
-  
   const audioRef = useRef<HTMLAudioElement>(null);
   const currentSong = songs[currentSongIndex];
   const audioUrl = `/audio/${currentSong}`;
@@ -72,13 +117,12 @@ export function AudioPlayer({ songs }: Props) {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  // Clean filename for display (remove .mp3 and underscores)
   const formatSongName = (filename: string) => {
     return filename.replace('.mp3', '').replace(/_/g, ' ');
   };
 
   return (
-    <div className="audio-player glass-panel animate-fade-in">
+    <PlayerWrapper variant="well">
       <audio 
         ref={audioRef} 
         onTimeUpdate={onTimeUpdate}
@@ -86,51 +130,46 @@ export function AudioPlayer({ songs }: Props) {
         onEnded={() => setIsPlaying(false)}
       />
       
-      <div className="player-header">
-        <Music className="music-icon" />
-        <div className="song-info">
-          <h4 className="song-title">{formatSongName(currentSong)}</h4>
-          <p className="song-subtitle">Local Track</p>
-        </div>
-      </div>
+      <SongName>
+        {isPlaying ? '► ' : '◼ '} {formatSongName(currentSong)} [{formatTime(progress)} / {formatTime(duration)}]
+      </SongName>
 
       {songs.length > 1 && (
-        <div className="playlist">
+        <PlaylistWrapper>
           {songs.map((song, index) => (
-            <button 
+            <PlaylistItem 
               key={song} 
-              className={`playlist-item ${index === currentSongIndex ? 'active' : ''}`}
+              active={index === currentSongIndex}
               onClick={() => {
                 setCurrentSongIndex(index);
                 setIsPlaying(true);
               }}
             >
-              {formatSongName(song)}
-            </button>
+              {index + 1}. {formatSongName(song)}
+            </PlaylistItem>
           ))}
-        </div>
+        </PlaylistWrapper>
       )}
 
-      <div className="controls">
-        <button className="play-btn" onClick={togglePlay}>
-          {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-        </button>
+      <ControlsWrapper>
+        <Button onClick={togglePlay} size="sm" square>
+          {isPlaying ? <Pause size={14} /> : <Play size={14} />}
+        </Button>
 
-        <div className="progress-container">
-          <span className="time">{formatTime(progress)}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexGrow: 1 }}>
+          <span style={{ fontSize: '11px' }}>Seek:</span>
           <input 
             type="range" 
             min="0" 
             max={duration || 0} 
             value={progress} 
             onChange={onProgressChange}
-            className="progress-bar"
+            style={{ flexGrow: 1, height: '10px' }}
           />
-          <span className="time">{formatTime(duration)}</span>
         </div>
 
-        <div className="volume-container">
-          <Volume2 size={18} className="volume-icon" />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <Volume2 size={14} />
           <input 
             type="range" 
             min="0" 
@@ -138,10 +177,12 @@ export function AudioPlayer({ songs }: Props) {
             step="0.01" 
             value={volume} 
             onChange={onVolumeChange}
-            className="volume-bar"
+            style={{ width: '50px', height: '10px' }}
           />
         </div>
-      </div>
-    </div>
+      </ControlsWrapper>
+    </PlayerWrapper>
   );
 }
+
+export default AudioPlayer;
