@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# KCHC Web App (Katerini City Hard Core) 🎸🕹️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Καλώς ήρθατε στο **KCHC Web App**, μια νοσταλγική εφαρμογή ιστού που σας ταξιδεύει πίσω στην εποχή των **Windows 95**! Αυτό το project είναι ένας φόρος τιμής για τους καλλιτέχνες της σκηνής της Κατερίνης, συνδυάζοντας την κουλτούρα της πόλης με την κλασική αισθητική των 90s.
 
-Currently, two official plugins are available:
+## 🚀 Χαρακτηριστικά
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+*   **Αυθεντική Εμπειρία Windows 95**: Χρησιμοποιεί τη βιβλιοθήκη `react95` για να αναπαράγει πιστά το UI των Windows 95.
+*   **Επιφάνεια Εργασίας με Φακέλους**: Κάθε καλλιτέχνης έχει τον δικό του φάκελο στην επιφάνεια εργασίας. Κάνοντας κλικ, ανοίγει το αντίστοιχο παράθυρο.
+*   **Διαχείριση Παραθύρων**: Τα παράθυρα των καλλιτεχνών και των εικόνων μπορούν να ανοίξουν, να κλείσουν και να εστιαστούν, προσφέροντας μια ολοκληρωμένη εμπειρία λειτουργικού συστήματος.
+*   **Ήχος Εκκίνησης**: Με την είσοδο στην εφαρμογή, ακούγεται ο κλασικός ήχος εκκίνησης των Windows 95!
+*   **Μενού "Έναρξη" (Start Menu)**: Πλήρως λειτουργικό μενού για γρήγορη πρόσβαση στους καλλιτέχνες και επιλογή "Τερματισμού".
+*   **Μπάρα Αναζήτησης**: Αναζητήστε εύκολα τον αγαπημένο σας καλλιτέχνη απευθείας από την επιφάνεια εργασίας.
+*   **Οθόνη Τερματισμού**: Η κλασική πορτοκαλί οθόνη "It is now safe to turn off your computer." όταν πατάτε Shut Down.
 
-## React Compiler
+## 🛠️ Τεχνολογίες
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **React 19**: Για την κατασκευή της διεπαφής χρήστη.
+*   **TypeScript**: Για ασφάλεια τύπων και καλύτερη εμπειρία ανάπτυξης.
+*   **Vite**: Για γρήγορο development και build.
+*   **React95**: Η βιβλιοθήκη που δίνει το ρετρό στυλ.
+*   **Styled Components**: Για τα προσαρμοσμένα στυλ και το θέμα.
+*   **React Router**: Για τη διαχείριση των διαδρομών (URLs) ανά καλλιτέχνη.
 
-## Expanding the ESLint configuration
+## ⚙️ Εγκατάσταση και Εκτέλεση
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Για να τρέξετε το project τοπικά στον υπολογιστή σας, ακολουθήστε τα παρακάτω βήματα:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1.  **Κλωνοποιήστε το αποθετήριο**:
+    ```bash
+    git clone https://github.com/KateriniCityHardCore/KCHC-Web-App.git
+    cd "KCHC Web App"
+    ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2.  **Εγκαταστήστε τις εξαρτήσεις**:
+    ```bash
+    npm install
+    ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+3.  **Εκκινήστε τον server ανάπτυξης**:
+    ```bash
+    npm run dev
+    ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+4.  Ανοίξτε τον browser σας στη διεύθυνση που θα σας εμφανίσει το Vite (συνήθως `http://localhost:5173`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📁 Δομή Έργου
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+*   `src/components/`: Περιέχει τα στοιχεία της διεπαφής (Desktop, ArtistWindow, ImageWindow κ.α.).
+*   `src/data/`: Περιέχει τα δεδομένα των καλλιτεχνών σε μορφή JSON.
+*   `public/`: Στατικά αρχεία (εικόνες, εικονίδια κ.α.).
+
+---
+*Αυτό το project δημιουργήθηκε με αγάπη για τη μουσική σκηνή της Κατερίνης και τη ρετρό τεχνολογία.*
