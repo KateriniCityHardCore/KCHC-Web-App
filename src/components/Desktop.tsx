@@ -249,7 +249,14 @@ export function Desktop() {
         {/* Οθόνη Τερματισμού */}
         {isShutDown && (
           <div
-            onClick={() => setIsShutDown(false)}
+            onClick={() => {
+              setIsShutDown(false);
+              setOpenWindows([]);
+              setOpenImageWindows([]);
+              setActiveWindowId(null);
+              setSearchQuery('');
+              navigate('/');
+            }}
             style={{
               position: 'fixed',
               top: 0,
