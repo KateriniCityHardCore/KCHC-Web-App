@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import { AppBar, Toolbar, Button, TextInput } from 'react95';
+import { AppBar, Toolbar, Button, TextInput, MenuList, MenuListItem } from 'react95';
 import artistsData from '../data/artists.json';
 import type { Artist } from '../types';
 import { FolderIcon } from './FolderIcon';
@@ -59,23 +59,29 @@ export function Desktop() {
   const { name } = useParams<{ name?: string }>();
   const navigate = useNavigate();
   const artists = artistsData as Artist[];
-  
+
   // Κατάσταση για τα ανοιχτά παράθυρα
   const [openWindows, setOpenWindows] = useState<string[]>([]);
-  
+
   // Κατάσταση για τα ανοιχτά παράθυρα εικόνων
   const [openImageWindows, setOpenImageWindows] = useState<string[]>([]);
-  
+
   // Κατάσταση για το ποιο παράθυρο είναι ενεργό (focused)
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
-  
+
+  // Κατάσταση για το Start Menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Κατάσταση για το Shutdown
+  const [isShutDown, setIsShutDown] = useState(false);
+
   // Κατάσταση για την αναζήτηση
   const [searchQuery, setSearchQuery] = useState('');
-  
-  const filteredArtists = artists.filter(artist => 
+
+  const filteredArtists = artists.filter(artist =>
     artist.Name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   // Έλεγχος αν υπάρχει καλλιτέχνης στο URL
   useEffect(() => {
     if (name) {
@@ -90,7 +96,7 @@ export function Desktop() {
   // Ήχος εκκίνησης Windows 95
   useEffect(() => {
     const audio = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2014/09/Windows-95-startup-sound.mp3');
-    
+
     const playSound = () => {
       audio.play().catch(() => {
         console.log('Autoplay blocked. Waiting for user interaction.');
@@ -137,6 +143,14 @@ export function Desktop() {
     navigate(`/artist/${encodeURIComponent(artistName)}`);
   };
 
+  const handleShutdown = () => {
+    setIsMenuOpen(false);
+    setIsShutDown(true);
+    // Χρήση του ίδιου ήχου ως placeholder για τον τερματισμό
+    const audio = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2014/09/Windows-95-startup-sound.mp3');
+    audio.play().catch(() => console.log('Autoplay blocked'));
+  };
+
   const handleCloseImage = (artistName: string) => {
     setOpenImageWindows(prev => prev.filter(w => w !== artistName));
   };
@@ -144,71 +158,121 @@ export function Desktop() {
   return (
     <>
       <GlobalDesktopStyle />
-      <DesktopWrapper>
-      {/* Εικονίδια για κάθε καλλιτέχνη */}
-      {filteredArtists.map(artist => (
-        <FolderIcon 
-          key={`icon-${artist.Name}`} 
-          name={artist.Name} 
-          onClick={() => handleOpenWindow(artist.Name)} 
-        />
-      ))}
-
-      {/* Παράθυρα για τους ανοιχτούς καλλιτέχνες */}
-      {openWindows.map(artistName => {
-        const artist = artists.find(a => a.Name === artistName);
-        if (!artist) return null;
-        const id = `artist-${artist.Name}`;
-        return (
-          <ArtistWindow 
-            key={`window-${artist.Name}`} 
-            artist={artist} 
-            onClose={() => handleCloseWindow(artist.Name)} 
-            onOpenImage={handleOpenImage}
-            onFocus={() => handleFocus(id, artist.Name)}
-            isActive={activeWindowId === id}
+      <DesktopWrapper onClick={() => setIsMenuOpen(false)}>
+        {/* Εικονίδια για κάθε καλλιτέχνη */}
+        {filteredArtists.map(artist => (
+          <FolderIcon
+            key={`icon-${artist.Name}`}
+            name={artist.Name}
+            onClick={() => handleOpenWindow(artist.Name)}
           />
-        );
-      })}
+        ))}
 
-      {/* Παράθυρα για τις ανοιχτές εικόνες */}
-      {openImageWindows.map(artistName => {
-        const artist = artists.find(a => a.Name === artistName);
-        if (!artist) return null;
-        const imageUrl = `/images/${artist.PhotoPath}`;
-        const id = `image-${artist.Name}`;
-        return (
-          <ImageWindow 
-            key={`${artist.Name}-image`} 
-            artist={artist} 
-            imageUrl={imageUrl}
-            onClose={() => handleCloseImage(artist.Name)} 
-            onFocus={() => handleFocus(id, artist.Name)}
-            isActive={activeWindowId === id}
-          />
-        );
-      })}
-
-      {/* Γραμμή Εργασιών (Taskbar) */}
-      <AppBar style={{ top: 'auto', bottom: 0 }}>
-        <Toolbar style={{ justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button style={{ fontWeight: 'bold' }}>
-              <img src="/images/kchc.ico" alt="Start" style={{ height: '20px', marginRight: '5px' }} />
-              Start
-            </Button>
-            <TextInput
-              value={searchQuery}
-              placeholder="Αναζήτηση..."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-              style={{ width: '200px', marginLeft: '10px' }}
+        {/* Παράθυρα για τους ανοιχτούς καλλιτέχνες */}
+        {openWindows.map(artistName => {
+          const artist = artists.find(a => a.Name === artistName);
+          if (!artist) return null;
+          const id = `artist-${artist.Name}`;
+          return (
+            <ArtistWindow
+              key={`window-${artist.Name}`}
+              artist={artist}
+              onClose={() => handleCloseWindow(artist.Name)}
+              onOpenImage={handleOpenImage}
+              onFocus={() => handleFocus(id, artist.Name)}
+              isActive={activeWindowId === id}
             />
+          );
+        })}
+
+        {/* Παράθυρα για τις ανοιχτές εικόνες */}
+        {openImageWindows.map(artistName => {
+          const artist = artists.find(a => a.Name === artistName);
+          if (!artist) return null;
+          const imageUrl = `/images/${artist.PhotoPath}`;
+          const id = `image-${artist.Name}`;
+          return (
+            <ImageWindow
+              key={`${artist.Name}-image`}
+              artist={artist}
+              imageUrl={imageUrl}
+              onClose={() => handleCloseImage(artist.Name)}
+              onFocus={() => handleFocus(id, artist.Name)}
+              isActive={activeWindowId === id}
+            />
+          );
+        })}
+
+        {/* Γραμμή Εργασιών (Taskbar) */}
+        <AppBar style={{ top: 'auto', bottom: 0, zIndex: 1000 }}>
+          <Toolbar style={{ justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+              <Button
+                style={{ fontWeight: 'bold' }}
+                onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
+                active={isMenuOpen}
+              >
+                <img src="/images/kchc.ico" alt="Start" style={{ height: '20px', marginRight: '5px' }} />
+                Start
+              </Button>
+
+              {/* Start Menu */}
+              {isMenuOpen && (
+                <MenuList style={{ position: 'absolute', bottom: '100%', left: 0, zIndex: 1001 }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                  <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                    {artists.map(a => (
+                      <MenuListItem key={a.Name} onClick={() => { handleOpenWindow(a.Name); setIsMenuOpen(false); }}>
+                        📁 {a.Name}
+                      </MenuListItem>
+                    ))}
+                  </div>
+                  <div style={{ height: '2px', background: '#808080', margin: '5px 0' }} />
+                  <MenuListItem onClick={handleShutdown}>
+                    💻 Shut Down...
+                  </MenuListItem>
+                </MenuList>
+              )}
+
+              <TextInput
+                value={searchQuery}
+                placeholder="Αναζήτηση..."
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                style={{ width: '200px', marginLeft: '10px' }}
+              />
+            </div>
+            <div style={{ padding: '0 10px' }}>
+              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+          </Toolbar>
+        </AppBar>
+
+        {/* Οθόνη Τερματισμού */}
+        {isShutDown && (
+          <div
+            onClick={() => setIsShutDown(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#000000',
+              color: '#ff8c00', /* Πορτοκαλί των Windows 95 */
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontFamily: 'monospace',
+              zIndex: 9999,
+              textAlign: 'center',
+              cursor: 'pointer'
+            }}
+          >
+            <h1 style={{ fontSize: '2rem', marginBottom: '20px' }}>
+              It is now safe to turn off your computer.
+            </h1>
           </div>
-          <div style={{ padding: '0 10px' }}>
-            {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-          </div>
-        </Toolbar>
-      </AppBar>
+        )}
       </DesktopWrapper>
     </>
   );
