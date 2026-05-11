@@ -20,6 +20,16 @@ export function ArtistDetails() {
   }
 
   const imageUrl = `/images/${artist.PhotoPath}`;
+ 
+  const getSpotifyEmbedUrl = (url: string) => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      return `https://open.spotify.com/embed${pathname}?utm_source=generator&theme=0`;
+    } catch (e) {
+      return url;
+    }
+  };
 
   return (
     <main className="artist-details-page">
@@ -49,6 +59,21 @@ export function ArtistDetails() {
 
           {artist.Songs && artist.Songs.length > 0 && (
             <AudioPlayer songs={artist.Songs} />
+          )}
+
+          {artist.SpotifyAccountUrl && (
+            <div className="spotify-embed animate-fade-in" style={{ marginTop: '2rem', marginBottom: '1rem' }}>
+              <iframe 
+                style={{ borderRadius: '12px' }} 
+                src={getSpotifyEmbedUrl(artist.SpotifyAccountUrl)} 
+                width="100%" 
+                height="352" 
+                frameBorder="0" 
+                allowFullScreen={true} 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              ></iframe>
+            </div>
           )}
 
           <div className="social-links">
