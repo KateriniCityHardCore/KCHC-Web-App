@@ -24,7 +24,7 @@
     "ExtraDescription": "I bought a TD-3, starting playing at parties, shook a lot of buttocks. Also cinephile."
   },
   {
-    "Name": "F.O.A.",
+    "Name": "FOA",
     "PhotoPath": "FOA.jpg",
     "Description": "Followers Of the Apocalypse",
     "YoutubeAccountUrl": "https://youtu.be/aPdP1e8RbUM?si=Offw0wOjuZVwFiYO",
@@ -90,7 +90,7 @@
     "Description": "DJ and Bliblikia",
     "ExtraDescription": "The COOLest DJ In The World",
     "YoutubeAccountUrl": "https://www.youtube.com/@MariosDimitriou",
-    "SpotifyAccountUrl": "https://open.spotify.com/user/11120416820",
+    "SpotifyAccountUrl": "https://open.spotify.com/artist/0uYWrxWBEjnGxNXlDZVtcw",
     "BandCampAccountUrl": "https://maydayofc.bandcamp.com/"
   },
   {
@@ -115,7 +115,9 @@
     "Description": "Katerinian Hard as Fuck Tough Guy Malicius Murderous Hardcore",
     "ExtraDescription": "Thanos 'Mengelit' - Murderous Raps\nSpiridonas - Apeshit Music and Unholy Screams",
     "IsABand": true,
-    "Songs": ["olympus.mp3"]
+    "Songs": [
+      "olympus.mp3"
+    ]
   },
   {
     "Name": "Pizza Boston",
@@ -123,7 +125,10 @@
     "Description": "Hardcore punk",
     "IsABand": true,
     "ExtraDescription": "Ellhnofwno topikistiko KCHC apovrasma",
-    "Songs": ["PizzaBoston_60K100.mp3", "PizzaBoston_Denthaseswseikaneis.mp3"]
+    "Songs": [
+      "PizzaBoston_60K100.mp3",
+      "PizzaBoston_Denthaseswseikaneis.mp3"
+    ]
   },
   {
     "Name": "PULL OUT",
@@ -160,7 +165,9 @@
     "IsABand": true,
     "SpotifyAccountUrl": "https://open.spotify.com/artist/6mxsIAUaOuuaYYVSkQ0xM9",
     "YoutubeAccountUrl": "https://www.youtube.com/channel/UCzNawIaqEx0rQ87S8v5uYRg",
-    "Songs": ["emo.mp3"]
+    "Songs": [
+      "emo.mp3"
+    ]
   },
   {
     "Name": "Theios Karaflesas",
@@ -176,7 +183,10 @@
     "Description": "Hardcore Punk from Katerini est.2015",
     "ExtraDescription": "Vocals:Panos\nGuitar:Spyros\nBass:Soc\nDrums:Giorgos",
     "IsABand": true,
-    "Songs": ["WordsOfHate_Barricade_live.mp3", "WordsOfHate_Siwph_live.mp3"]
+    "Songs": [
+      "WordsOfHate_Barricade_live.mp3",
+      "WordsOfHate_Siwph_live.mp3"
+    ]
   },
   {
     "Name": "Aχώνευτοι",
@@ -184,7 +194,9 @@
     "Description": "Punk Rock",
     "ExtraDescription": "Υλικό που βρέθηκε σε μία κασέτα στο πατάρι από το '78",
     "IsABand": true,
-    "Songs": ["Axoneutoi_Cassetetape.mp3"]
+    "Songs": [
+      "Axoneutoi_Cassetetape.mp3"
+    ]
   },
   {
     "Name": "έβαν",
@@ -193,6 +205,14 @@
     "ExtraDescription": "ελληνικη ινδιε εμο φολκ και όχι μόνο...",
     "SpotifyAccountUrl": "https://open.spotify.com/artist/18ZQQi1nOI6p2YrK3dPQ51?si=_8-D5BNeRWq8NiKfRxOL_Q",
     "YoutubeAccountUrl": "https://www.youtube.com/@EvanKakouris"
+  },
+  {
+    "Name": "Νηφάλια Τοποθέτηση",
+    "PhotoPath": "NafalhiaTope8etisi.jpg",
+    "Description": "Hardcore punk",
+    "ExtraDescription": "Ακόμα ένα KCHC απόβρασμα.",
+    "BandCampAccountUrl": "https://nifaliatopothetisi.bandcamp.com/album/-",
+    "YoutubeAccountUrl": "https://youtu.be/g2rRCd_m2zI?si=vgy63dOQo-dHIo3W"
   },
   {
     "Name": "Θεοχάρης",

@@ -1,22 +1,15 @@
-import { useRef } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Window, WindowHeader, WindowContent, Button } from 'react95';
+import { Window, WindowHeader, WindowContent, Button, ScrollView } from 'react95';
 import { Play, Music, Radio, Tv, MonitorPlay } from 'lucide-react';
-import Draggable from 'react-draggable';
+import { Rnd } from 'react-rnd';
 import type { Artist } from '../types';
 import { AudioPlayer } from './AudioPlayer';
 
 // Στυλ για το παράθυρο
-const DraggableWrapper = styled.div`
-  position: absolute;
-  top: 50px;
-  left: 50px;
-  z-index: 10;
-`;
-
 const StyledWindow = styled(Window)`
-  width: 450px;
-  max-width: 90vw;
+  width: 100%;
+  height: 100%;
   
   /* Προσθήκη σκιάς για εφέ βάθους */
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
@@ -51,11 +44,23 @@ const SocialBtn = styled(Button)`
 interface ArtistWindowProps {
   artist: Artist;
   onClose: () => void;
+  onOpenImage?: (artistName: string) => void;
+  onFocus: () => void;
+  isActive: boolean;
 }
 
-export function ArtistWindow({ artist, onClose }: ArtistWindowProps) {
+export function ArtistWindow({ artist, onClose, onOpenImage, onFocus, isActive }: ArtistWindowProps) {
   const imageUrl = `/images/${artist.PhotoPath}`;
-  const nodeRef = useRef(null);
+
+  // Παραγωγή τυχαίας θέσης κατά το mount του παραθύρου
+  const [initialPosition] = useState(() => {
+    const maxWidth = window.innerWidth > 500 ? window.innerWidth - 470 : 10;
+    const maxHeight = window.innerHeight > 600 ? window.innerHeight - 550 : 10;
+    return {
+      x: Math.floor(Math.random() * maxWidth) + 20,
+      y: Math.floor(Math.random() * maxHeight) + 20,
+    };
+  });
 
   const getSpotifyEmbedUrl = (url: string) => {
     try {
@@ -68,10 +73,29 @@ export function ArtistWindow({ artist, onClose }: ArtistWindowProps) {
   };
 
   return (
-    <Draggable nodeRef={nodeRef} handle=".window-header">
-      <DraggableWrapper ref={nodeRef}>
-        <StyledWindow>
-          <WindowHeader 
+    <Rnd
+      default={{
+        x: initialPosition.x,
+        y: initialPosition.y,
+        width: 450,
+        height: 500,
+      }}
+      dragHandleClassName="window-header"
+      enableResizing={{ bottomRight: true }}
+      resizeHandleStyles={{
+        bottomRight: {
+          width: '20px',
+          height: '20px',
+          bottom: '0px',
+          right: '0px',
+          zIndex: 100,
+        }
+      }}
+      bounds="parent"
+      style={{ zIndex: isActive ? 100 : 10 }}
+    >
+      <StyledWindow resizable onMouseDown={onFocus}>
+        <WindowHeader 
             className="window-header" 
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'move' }}
           >
@@ -80,9 +104,17 @@ export function ArtistWindow({ artist, onClose }: ArtistWindowProps) {
               <span style={{ fontWeight: 'bold', transform: 'translateY(-1px)' }}>x</span>
             </Button>
           </WindowHeader>
-      <WindowContent>
-        <FlexContainer>
-          <ProfileImage src={imageUrl} alt={artist.Name} />
+      <WindowContent style={{ height: 'calc(100% - 35px)', padding: 0 }}>
+        <ScrollView style={{ width: '100%', height: '100%' }}>
+          <div style={{ padding: '20px' }}>
+            <FlexContainer>
+          <ProfileImage 
+            src={imageUrl} 
+            alt={artist.Name} 
+            onClick={() => onOpenImage?.(artist.Name)} 
+            style={{ cursor: 'pointer' }}
+            title="Κάντε κλικ για μεγέθυνση"
+          />
           <div>
             <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '5px' }}>{artist.Name}</h2>
             <p style={{ fontSize: '14px' }}>{artist.Description}</p>
@@ -162,10 +194,11 @@ export function ArtistWindow({ artist, onClose }: ArtistWindowProps) {
             </SocialBtn>
           )}
         </SocialLinks>
+          </div>
+        </ScrollView>
       </WindowContent>
         </StyledWindow>
-      </DraggableWrapper>
-    </Draggable>
+    </Rnd>
   );
 }
 
