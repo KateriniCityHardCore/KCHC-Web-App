@@ -146,6 +146,10 @@ export function Desktop() {
   const handleShutdown = () => {
     setIsMenuOpen(false);
     setIsShutDown(true);
+    
+    // Σταμάτημα όλων των ήχων που παίζουν (π.χ. από το AudioPlayer)
+    document.querySelectorAll('audio').forEach(el => el.pause());
+    
     // Χρήση του ίδιου ήχου ως placeholder για τον τερματισμό
     const audio = new Audio('https://www.orangefreesounds.com/wp-content/uploads/2014/09/Windows-95-startup-sound.mp3');
     audio.play().catch(() => console.log('Autoplay blocked'));
