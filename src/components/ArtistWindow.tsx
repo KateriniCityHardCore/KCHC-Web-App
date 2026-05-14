@@ -77,8 +77,8 @@ export function ArtistWindow({ artist, onClose, onOpenImage, onFocus, isActive }
       default={{
         x: initialPosition.x,
         y: initialPosition.y,
-        width: 450,
-        height: 500,
+        width: Math.min(450, window.innerWidth - 20),
+        height: Math.min(500, window.innerHeight - 100),
       }}
       dragHandleClassName="window-header"
       enableResizing={{ bottomRight: true }}

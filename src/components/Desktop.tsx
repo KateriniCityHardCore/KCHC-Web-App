@@ -19,6 +19,7 @@ const DesktopWrapper = styled.div`
   grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
   gap: 20px;
   align-content: start;
+  overflow: hidden; /* Αποφυγή οριζόντιας κύλισης που αποκαλύπτει το μαύρο φόντο */
 `;
 
 const GlobalDesktopStyle = createGlobalStyle`
